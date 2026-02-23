@@ -6,70 +6,112 @@
     <title>V2Ray6 - Cybernetic Flow</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* التنسيق الاحترافي المستقبلي */
-        body { background-color: #0a0a0a; color: #e0e0e0; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
-        .header { width: 100%; background: linear-gradient(135deg, #1a1a1a, #0a0a0a); padding: 30px; text-align: center; border-bottom: 2px solid #00e0ff; box-shadow: 0 5px 20px rgba(0,224,255,0.2); margin-bottom: 30px; }
-        .header h1 { font-family: 'Orbitron', sans-serif; color: #00e0ff; text-shadow: 0 0 15px rgba(0,224,255,0.6); margin: 0; font-size: 2.2rem; }
-        .main-container { width: 95%; max-width: 900px; background: #1a1a1a; padding: 25px; border-radius: 20px; border: 1px solid #333; box-shadow: 0 10px 40px rgba(0,0,0,0.8); position: relative; }
+        body { background-color: #0a0a0a; color: #e0e0e0; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; }
+        .header { width: 100%; background: linear-gradient(135deg, #1a1a1a, #0a0a0a); padding: 25px; text-align: center; border-bottom: 2px solid #00e0ff; box-shadow: 0 5px 20px rgba(0,224,255,0.2); }
+        .header h1 { font-family: 'Orbitron', sans-serif; color: #00e0ff; text-shadow: 0 0 15px rgba(0,224,255,0.6); font-size: 2rem; }
         
-        /* منطقة الإعلان وقفل المحتوى */
-        .unlock-box { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px; text-align: center; border: 2px dashed #00e0ff; border-radius: 15px; background: rgba(0, 224, 255, 0.03); }
-        .btn-unlock { background: #00aaff; color: white; padding: 18px 40px; border-radius: 10px; font-size: 1.3rem; text-decoration: none; font-weight: bold; transition: 0.4s; box-shadow: 0 0 20px rgba(0,170,255,0.3); border: none; cursor: pointer; }
-        .btn-unlock:hover { background: #00d2ff; transform: scale(1.05); box-shadow: 0 0 30px rgba(0,210,255,0.5); }
+        .main-container { width: 95%; max-width: 900px; margin-top: 30px; }
         
-        /* العداد التنازلي */
-        #status-msg { margin-top: 25px; font-family: 'Orbitron', sans-serif; color: #00ff80; display: none; font-size: 1.1rem; }
-        #timer-num { font-size: 1.5rem; font-weight: bold; color: #fff; }
+        /* قائمة اختيار الفيديوهات */
+        .video-selector { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 30px; }
+        .vid-btn { background: #1a1a1a; border: 1px solid #333; color: white; padding: 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; font-weight: bold; }
+        .vid-btn:hover { border-color: #00e0ff; background: #222; }
+        .vid-btn.active { background: #00e0ff; color: #000; border-color: #00e0ff; box-shadow: 0 0 15px rgba(0,224,255,0.5); }
 
-        /* مشغل Gumlet */
-        #player-wrapper { display: none; width: 100%; position: relative; padding-top: 56.25%; /* نسبة 16:9 */ }
-        #player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 15px; border: none; }
+        /* منطقة القفل والمشغل */
+        .content-box { background: #161b22; padding: 20px; border-radius: 15px; border: 1px solid #30363d; min-height: 400px; position: relative; }
+        .lock-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 350px; text-align: center; }
+        .btn-ad { background: #00aaff; color: white; padding: 15px 35px; border-radius: 8px; font-size: 1.2rem; text-decoration: none; font-weight: bold; margin-top: 20px; box-shadow: 0 0 15px rgba(0,170,255,0.3); }
         
-        .footer { margin-top: 40px; color: #555; font-size: 0.9rem; padding-bottom: 20px; }
+        #player-wrapper { display: none; width: 100%; height: 500px; border-radius: 10px; overflow: hidden; }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        #timer-box { margin-top: 20px; color: #00ff80; font-family: 'Orbitron', sans-serif; display: none; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h1>V2Ray6 - Cybernetic Flow</h1>
-        <p style="color: #888; margin-top: 10px;">دورة التعليم المتقدم عبر Gumlet & GitHub</p>
+        <p>مشروع دورة التعليم المتقدم | Gumlet & GitHub</p>
     </div>
 
     <div class="main-container">
-        <div id="unlock-area" class="unlock-box">
-            <p style="font-size: 1.1rem; margin-bottom: 25px; color: #ccc;">المحتوى مقفل! يرجى دعمنا بفتح الرابط أدناه لمشاهدة الفيديوهات:</p>
-            <a href="https://omg10.com/4/10637838" target="_blank" class="btn-unlock" onclick="startCountdown()">🔓 إفتح الرابط و ابدأ المشاهدة</a>
-            <div id="status-msg">سيفتح المشغل تلقائياً بعد <span id="timer-num">8</span> ثوانٍ...</div>
+        <div class="video-selector">
+            <button class="vid-btn" onclick="selectVideo(1)">الفيديو 01</button>
+            <button class="vid-btn" onclick="selectVideo(2)">الفيديو 02</button>
+            <button class="vid-btn" onclick="selectVideo(3)">الفيديو 03</button>
+            <button class="vid-btn" onclick="selectVideo(4)">الفيديو 04</button>
+            <button class="vid-btn" onclick="selectVideo(5)">الفيديو 05</button>
         </div>
 
-        <div id="player-wrapper">
-            <iframe src="https://play.gumlet.io/embed/playlist/699caea771f7bf393a69c269" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
+        <div class="content-box">
+            <div id="lockScreen" class="lock-screen">
+                <h3 id="vidTitle">اختر فيديو للبدء</h3>
+                <p id="vidDesc" style="color: #888;">يجب تخطي الإعلان المخصص لهذا الدرس للمشاهدة</p>
+                <a href="#" id="adLink" target="_blank" class="btn-ad" style="display:none;" onclick="startUnlock()">🔓 فتح الدرس الآن</a>
+                <div id="timer-box">سيفتح الدرس خلال <span id="sec">8</span> ثوانٍ...</div>
+            </div>
 
-    <div class="footer">
-        Powered by SHΔDØW CORE | V2Ray6 Project 2026
+            <div id="player-wrapper">
+                <iframe id="gumletPlayer" src="" allowfullscreen></iframe>
+            </div>
+        </div>
     </div>
 
     <script>
-        function startCountdown() {
-            // إظهار رسالة العداد
-            document.getElementById('status-msg').style.display = 'block';
-            let seconds = 8;
+        // روابط الإعلانات الخاصة بك
+        const ads = {
+            1: "https://omg10.com/4/10637838",
+            2: "https://omg10.com/4/10639585",
+            3: "https://omg10.com/4/10638265",
+            4: "https://omg10.com/4/10637840",
+            5: "https://omg10.com/4/10637839"
+        };
+
+        // رابط قائمة تشغيل Gumlet الخاصة بك
+        const playlistBase = "https://play.gumlet.io/embed/playlist/699caea771f7bf393a69c269";
+
+        let currentVid = 0;
+
+        function selectVideo(id) {
+            currentVid = id;
+            // إعادة ضبط الواجهة
+            document.getElementById('player-wrapper').style.display = 'none';
+            document.getElementById('lockScreen').style.display = 'flex';
+            document.getElementById('timer-box').style.display = 'none';
             
-            const timerInterval = setInterval(() => {
-                seconds--;
-                document.getElementById('timer-num').innerText = seconds;
-                
-                if (seconds <= 0) {
-                    clearInterval(timerInterval);
-                    // إخفاء منطقة القفل وإظهار المشغل
-                    document.getElementById('unlock-area').style.display = 'none';
-                    document.getElementById('player-wrapper').style.display = 'block';
+            // تحديث البيانات
+            document.getElementById('vidTitle').innerText = "فتح الفيديو رقم " + id;
+            document.getElementById('adLink').href = ads[id];
+            document.getElementById('adLink').style.display = 'inline-block';
+            
+            // تحديث شكل الأزرار
+            const btns = document.querySelectorAll('.vid-btn');
+            btns.forEach((btn, index) => {
+                btn.classList.toggle('active', index + 1 === id);
+            });
+        }
+
+        function startUnlock() {
+            document.getElementById('timer-box').style.display = 'block';
+            let time = 8;
+            const counter = setInterval(() => {
+                time--;
+                document.getElementById('sec').innerText = time;
+                if (time <= 0) {
+                    clearInterval(counter);
+                    showVideo();
                 }
             }, 1000);
         }
-    </script>
 
+        function showVideo() {
+            document.getElementById('lockScreen').style.display = 'none';
+            document.getElementById('player-wrapper').style.display = 'block';
+            // نقوم بتمرير رقم الفيديو للمشغل ليبدأ منه مباشرة إذا كانت القائمة تدعم ذلك
+            document.getElementById('gumletPlayer').src = playlistBase;
+        }
+    </script>
 </body>
 </html>
