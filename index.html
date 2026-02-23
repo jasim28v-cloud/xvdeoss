@@ -6,218 +6,68 @@
     <title>V2Ray6 - Cybernetic Flow</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS Global Reset & Base */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: #0a0a0a; /* Darkest background */
-            color: #e0e0e0; /* Light grey for general text */
-            font-family: 'Cairo', sans-serif; /* Modern Arabic font */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            padding-bottom: 50px; /* Space for footer/bottom elements */
-            position: relative;
-        }
+        /* التنسيق الاحترافي المستقبلي */
+        body { background-color: #0a0a0a; color: #e0e0e0; font-family: 'Cairo', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
+        .header { width: 100%; background: linear-gradient(135deg, #1a1a1a, #0a0a0a); padding: 30px; text-align: center; border-bottom: 2px solid #00e0ff; box-shadow: 0 5px 20px rgba(0,224,255,0.2); margin-bottom: 30px; }
+        .header h1 { font-family: 'Orbitron', sans-serif; color: #00e0ff; text-shadow: 0 0 15px rgba(0,224,255,0.6); margin: 0; font-size: 2.2rem; }
+        .main-container { width: 95%; max-width: 900px; background: #1a1a1a; padding: 25px; border-radius: 20px; border: 1px solid #333; box-shadow: 0 10px 40px rgba(0,0,0,0.8); position: relative; }
+        
+        /* منطقة الإعلان وقفل المحتوى */
+        .unlock-box { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px; text-align: center; border: 2px dashed #00e0ff; border-radius: 15px; background: rgba(0, 224, 255, 0.03); }
+        .btn-unlock { background: #00aaff; color: white; padding: 18px 40px; border-radius: 10px; font-size: 1.3rem; text-decoration: none; font-weight: bold; transition: 0.4s; box-shadow: 0 0 20px rgba(0,170,255,0.3); border: none; cursor: pointer; }
+        .btn-unlock:hover { background: #00d2ff; transform: scale(1.05); box-shadow: 0 0 30px rgba(0,210,255,0.5); }
+        
+        /* العداد التنازلي */
+        #status-msg { margin-top: 25px; font-family: 'Orbitron', sans-serif; color: #00ff80; display: none; font-size: 1.1rem; }
+        #timer-num { font-size: 1.5rem; font-weight: bold; color: #fff; }
 
-        /* --- Header Section --- */
-        .main-header {
-            width: 100%;
-            background: linear-gradient(135deg, #1a1a1a, #0a0a0a); /* Subtle gradient */
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 2px solid #0f0f0f;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-            margin-bottom: 40px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        .main-header h1 {
-            font-family: 'Orbitron', sans-serif; /* Futuristic font */
-            font-size: 2.8rem;
-            color: #00e0ff; /* Cyber blue */
-            text-shadow: 0 0 15px rgba(0,224,255,0.6), 0 0 25px rgba(0,224,255,0.4);
-            margin: 0;
-            letter-spacing: 2px;
-            animation: glow 1.5s infinite alternate; /* Subtle glow animation */
-        }
-        .main-header p {
-            color: #888;
-            font-size: 1.1rem;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
-        }
-
-        /* --- Main Content Container --- */
-        .content-wrapper {
-            width: 95%;
-            max-width: 1000px;
-            background-color: #1a1a1a; /* Darker panel background */
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid #333;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.7);
-            position: relative;
-            z-index: 10;
-        }
-
-        /* --- Ad Overlay Section --- */
-        .ad-overlay {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px; /* Ensure enough space */
-            text-align: center;
-            padding: 20px;
-            background-color: #222; /* Slightly lighter background for overlay */
-            border-radius: 10px;
-            border: 1px dashed #00e0ff;
-            box-shadow: inset 0 0 10px rgba(0,224,255,0.2);
-            position: relative;
-        }
-        .ad-overlay p {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            color: #c0c0c0;
-            line-height: 1.6;
-        }
-        .btn-watch {
-            background-color: #00aaff; /* Vibrant blue for button */
-            color: white;
-            padding: 18px 40px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.4rem;
-            cursor: pointer;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 5px 15px rgba(0,170,255,0.4);
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .btn-watch::before { /* Hover effect */
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 300%;
-            height: 300%;
-            background: rgba(255,255,255,0.1);
-            transition: all 0.7s ease-in-out;
-            border-radius: 50%;
-            z-index: -1;
-            transform: translate(-50%, -50%) scale(0);
-        }
-        .btn-watch:hover::before {
-            transform: translate(-50%, -50%) scale(1);
-        }
-        #countdown {
-            margin-top: 25px;
-            font-size: 1.2rem;
-            color: #00e0ff;
-            display: none;
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 8px rgba(0,224,255,0.5);
-        }
-        #countdown span {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #00ff80; /* Green for countdown number */
-        }
-        #videoPlayer {
-            display: none; /* Initially hidden */
-            border-radius: 10px; /* Match container border */
-            overflow: hidden; /* Ensure iframe respects border-radius */
-        }
-        iframe {
-            width: 100%;
-            height: 550px; /* Slightly taller for better viewing */
-            border: none;
-            display: block; /* Remove extra space below iframe */
-        }
-
-        /* --- Footer (Optional) --- */
-        .main-footer {
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
-            margin-top: 50px;
-            border-top: 1px solid #222;
-        }
-        .main-footer a {
-            color: #00e0ff;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .main-footer a:hover {
-            color: #00aaff;
-        }
-
-        /* --- Responsive Design --- */
-        @media (max-width: 768px) {
-            .main-header h1 { font-size: 2.2rem; }
-            .main-header p { font-size: 1rem; }
-            .content-wrapper { padding: 20px; }
-            .ad-overlay p { font-size: 1.1rem; }
-            .btn-watch { padding: 12px 25px; font-size: 1.2rem; }
-            #countdown { font-size: 1rem; }
-            #countdown span { font-size: 1.5rem; }
-            iframe { height: 350px; } /* Adjust height for mobile */
-        }
-
-        /* --- Animations --- */
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(0,224,255,0.6), 0 0 15px rgba(0,224,255,0.4); }
-            to { text-shadow: 0 0 15px rgba(0,224,255,0.8), 0 0 25px rgba(0,224,255,0.6); }
-        }
+        /* مشغل Gumlet */
+        #player-wrapper { display: none; width: 100%; position: relative; padding-top: 56.25%; /* نسبة 16:9 */ }
+        #player-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 15px; border: none; }
+        
+        .footer { margin-top: 40px; color: #555; font-size: 0.9rem; padding-bottom: 20px; }
     </style>
 </head>
 <body>
 
-    <header class="main-header">
+    <div class="header">
         <h1>V2Ray6 - Cybernetic Flow</h1>
-        <p>بوابة لتعلم و استكشاف أسرار V2Ray6 بتقنيات متقدمة</p>
-    </header>
+        <p style="color: #888; margin-top: 10px;">دورة التعليم المتقدم عبر Gumlet & GitHub</p>
+    </div>
 
-    <div class="content-wrapper">
-        <div id="adSection" class="ad-overlay">
-            <p>للوصول إلى المحتوى التعليمي عالي الجودة ودعم استمراريته،<br>يرجى النقر على الرابط التالي وتخطي الإعلان:</p>
-            <a href="https://omg10.com/4/10637838" target="_blank" class="btn-watch" onclick="startUnlock()">تخطي الإعلان و مشاهدة المحتوى</a>
-            <div id="countdown">المحتوى سيصبح متاحاً خلال <span id="timer">5</span> ثوانٍ...</div>
+    <div class="main-container">
+        <div id="unlock-area" class="unlock-box">
+            <p style="font-size: 1.1rem; margin-bottom: 25px; color: #ccc;">المحتوى مقفل! يرجى دعمنا بفتح الرابط أدناه لمشاهدة الفيديوهات:</p>
+            <a href="https://omg10.com/4/10637838" target="_blank" class="btn-unlock" onclick="startCountdown()">🔓 إفتح الرابط و ابدأ المشاهدة</a>
+            <div id="status-msg">سيفتح المشغل تلقائياً بعد <span id="timer-num">8</span> ثوانٍ...</div>
         </div>
 
-        <div id="videoPlayer">
-            <iframe src="https://media.publit.io/player/V2Ray6.html?playlist=true" frameborder="0" allowfullscreen></iframe>
+        <div id="player-wrapper">
+            <iframe src="https://play.gumlet.io/embed/playlist/699caea771f7bf393a69c269" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
-    <footer class="main-footer">
-        &copy; 2023 V2Ray6 - جميع الحقوق محفوظة. | Powered by <a href="https://publit.io/" target="_blank">Publitio</a> & <a href="https://github.com/" target="_blank">GitHub Pages</a>
-    </footer>
+    <div class="footer">
+        Powered by SHΔDØW CORE | V2Ray6 Project 2026
+    </div>
 
     <script>
-        function startUnlock() {
-            document.getElementById('countdown').style.display = 'block';
-            let timer = 5;
-            document.getElementById('timer').innerText = timer;
-
-            const interval = setInterval(() => {
-                timer--;
-                document.getElementById('timer').innerText = timer;
-                if (timer <= 0) {
-                    clearInterval(interval);
-                    document.getElementById('adSection').style.display = 'none';
-                    document.getElementById('videoPlayer').style.display = 'block';
+        function startCountdown() {
+            // إظهار رسالة العداد
+            document.getElementById('status-msg').style.display = 'block';
+            let seconds = 8;
+            
+            const timerInterval = setInterval(() => {
+                seconds--;
+                document.getElementById('timer-num').innerText = seconds;
+                
+                if (seconds <= 0) {
+                    clearInterval(timerInterval);
+                    // إخفاء منطقة القفل وإظهار المشغل
+                    document.getElementById('unlock-area').style.display = 'none';
+                    document.getElementById('player-wrapper').style.display = 'block';
                 }
-            }, 1000); // تحديث كل ثانية
+            }, 1000);
         }
     </script>
 
